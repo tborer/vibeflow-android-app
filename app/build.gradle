@@ -1,0 +1,9 @@
+plugins {
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0' // Use the latest version
+}
+dependencies {
+    // Other dependencies
+    implementation("com.google.mlkit:text-recognition:16.0.0") // Or the latest stable version
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0") // Use the latest version
+    implementation("com.google.ai.client.generativeai:generativeai:latest.release")
+}
