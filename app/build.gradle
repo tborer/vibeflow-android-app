@@ -5,17 +5,20 @@ plugins {
 }
 
 android {
-    namespace 'com.example.your_app_name' // Make sure this is correct
+    namespace 'com.example.your_app_name'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.your_app_name" // Make sure this is correct
+        applicationId "com.example.your_app_name"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Enable multidex
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -57,4 +60,7 @@ dependencies {
 
     // Lifecycle scope for coroutines
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    
+    // Multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
