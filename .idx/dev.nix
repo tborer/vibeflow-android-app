@@ -1,57 +1,44 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://developers.google.com/idx/guides/customize-idx-env
 { pkgs, ... }: {
-  # Which nixpkgs channel to use.
-  channel = "stable-24.05"; # or "unstable"
-  # Use https://search.nixos.org/packages to find packages 
+  # Using the unstable channel for more up-to-date packages for Android development.
+  channel = "unstable";
+
   packages = [
     pkgs.gradle
     pkgs.kotlin
-    pkgs.android-ndk-r25b
-    pkgs.jdk11
+    pkgs.jdk17
+    # Replaced pkgs.android-studio with the more lightweight and appropriate android-sdk
+    pkgs.android-sdk
   ];
-  # Sets environment variables in the workspace
+
   env = {
-    JAVA_HOME = "${pkgs.jdk11}";
+    # Correctly set JAVA_HOME
+    JAVA_HOME = "${pkgs.jdk17}";
+    # Correctly set ANDROID_HOME and ANDROID_SDK_ROOT
+    ANDROID_HOME = "${pkgs.android-sdk}";
+    ANDROID_SDK_ROOT = "${pkgs.android-sdk}";
   };
+
   idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
-      # "vscodevim.vim"
- "kotlin.kotlin-vscode"
+      # Corrected Kotlin extension ID
+      "fwcd.kotlin"
+      # Corrected Android extension ID
+      "ms-android.android-pack"
     ];
-    # Enable previews
-    previews = {
-      enable = true;
-      previews = {
-        # web = {
-        #   # Example: run "npm run dev" with PORT set to IDX's defined port for previews,
-        #   # and show it in IDX's web preview panel
-        #   command = ["npm" "run" "dev"];
-        #   manager = "web";
-        #   env = {
-        #     # Environment variables to set for your server
-        #     PORT = "$PORT";
-        #   };
-        # };
-      };
-    };
-    # Workspace lifecycle hooks
+
     workspace = {
-      # Runs when a workspace is first created
       onCreate = {
-        # Example: install JS dependencies from NPM
-        # npm-install = "npm install";
-        # Open editors for the following files by default, if they exist:
-        default.openFiles = [ "/workspace/.idx/dev.nix" "/workspace/README.md" ];
-        gradle-wrapper = "cd app && gradle wrapper";
+        # Accept Android SDK licenses using the correct sdkmanager path
+        accept-licenses = "yes | ${pkgs.android-sdk}/cmdline-tools/latest/bin/sdkmanager --licenses";
+        # Install required SDK components
+        install-sdk = "${pkgs.android-sdk}/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"";
+        # Setup gradle wrapper
+        gradle-wrapper = "cd app && ./gradlew wrapper || gradle wrapper";
       };
-      # Runs when the workspace is (re)started
+      
       onStart = {
-        # Example: start a background task to watch and re-build backend code
-        # watch-backend = "npm run watch-backend";
-        build-project = "./gradlew build";
-        build-apk = "./gradlew assembleDebug";
+        # The onStart hook is a good place to run dev servers or other tasks that should start with the workspace.
+        # For this project, we'll leave it empty for now.
       };
     };
   };
