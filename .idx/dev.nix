@@ -22,7 +22,7 @@
       # Runs when a workspace is first created
       onCreate = {
         # Download and set up the Android SDK
-        sdk-setup = '''
+        sdk-setup = ''
           mkdir -p $HOME/android-sdk
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
           unzip -q commandlinetools-linux-11076708_latest.zip -d $HOME/android-sdk/cmdline-tools
@@ -30,7 +30,7 @@
           # Accept all licenses
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;34.0.0" "platforms;android-34"
-        ''';
+        '';
       };
     };
   };
