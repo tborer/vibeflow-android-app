@@ -19,7 +19,7 @@ android {
         
         // Enable multidex for faster builds
         multiDexEnabled true
-        buildConfigField "String", "GEMINI_API_KEY", ""${System.getenv("GEMINI_API_KEY")}""
+        buildConfigField "String", "GEMINI_API_KEY", "\"${System.getenv("GEMINI_API_KEY") ?: ""}\""
 
     }
 
@@ -38,6 +38,7 @@ android {
 
     // Enable build features only when needed
     buildFeatures {
+        buildConfig = true
         viewBinding = false  // Enable only if using view binding
         dataBinding = false  // Enable only if using data binding
     }
