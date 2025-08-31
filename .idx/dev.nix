@@ -49,10 +49,7 @@
         ''';
       };
       
-      onStart = {
-        # The onStart hook is a good place to run dev servers or other tasks that should start with the workspace.
-        # For this project, we'll leave it empty for now.
-      };
+      onStart = {};
     };
   };
 }
