@@ -32,21 +32,21 @@
     workspace = {
       onCreate = {
         # Accept Android SDK licenses using the correct sdkmanager path
-        accept-licenses = '''
+        accept-licenses = ''
           yes | ${pkgs.android-studio}/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
-        ''';
+        '';
         # Install required SDK components INCLUDING NDK
-        install-sdk = '''
+        install-sdk = ''
           ${pkgs.android-studio}/android-sdk/cmdline-tools/latest/bin/sdkmanager \
             "platform-tools" \
             "platforms;android-34" \
             "build-tools;34.0.0" \
             "ndk;25.1.8937393" || true
-        ''';
+        '';
         # Setup gradle wrapper
-        gradle-wrapper = '''
+        gradle-wrapper = ''
           cd app && (./gradlew wrapper || gradle wrapper) || true
-        ''';
+        '';
       };
       
       onStart = {};
