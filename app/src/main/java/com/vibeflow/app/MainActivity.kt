@@ -1,4 +1,4 @@
-package com.example.your_app_name
+package com.vibeflow.app
 
 import android.app.Activity
 import android.content.ContentValues.TAG
@@ -21,7 +21,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.launch
-import com.example.your_app_name.BuildConfig
+import com.vibeflow.app.BuildConfig
 import androidx.lifecycle.lifecycleScope
 import java.io.IOException
 

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.your_app_name'
+    namespace 'com.vibeflow.app'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.your_app_name"
+        applicationId "com.vibeflow.app"
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -19,6 +19,8 @@ android {
         
         // Enable multidex for faster builds
         multiDexEnabled true
+        buildConfigField "String", "GEMINI_API_KEY", ""${System.getenv("GEMINI_API_KEY")}""
+
     }
 
     buildTypes {
