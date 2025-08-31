@@ -17,7 +17,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         
-        // Enable multidex
+        // Enable multidex for faster builds
         multiDexEnabled true
     }
 
@@ -26,7 +26,21 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            // Disable unnecessary tasks in debug builds
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+        }
     }
+
+    // Enable build features only when needed
+    buildFeatures {
+        viewBinding = false  // Enable only if using view binding
+        dataBinding = false  // Enable only if using data binding
+    }
+    
+    // Optimize compilation
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
