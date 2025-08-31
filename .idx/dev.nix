@@ -3,12 +3,17 @@
 { pkgs, ... }: {
   # Which nixpkgs channel to use.
   channel = "stable-24.05"; # or "unstable"
-  # Use https://search.nixos.org/packages to find packages
+  # Use https://search.nixos.org/packages to find packages 
   packages = [
+    pkgs.gradle
     pkgs.kotlin
+    pkgs.android-ndk-r25b
+    pkgs.jdk11
   ];
   # Sets environment variables in the workspace
-  env = {};
+  env = {
+    JAVA_HOME = "${pkgs.jdk11}";
+  };
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
@@ -38,12 +43,15 @@
         # Example: install JS dependencies from NPM
         # npm-install = "npm install";
         # Open editors for the following files by default, if they exist:
-        default.openFiles = [ ".idx/dev.nix" "README.md" ];
+        default.openFiles = [ "/workspace/.idx/dev.nix" "/workspace/README.md" ];
+        gradle-wrapper = "cd app && gradle wrapper";
       };
       # Runs when the workspace is (re)started
       onStart = {
         # Example: start a background task to watch and re-build backend code
         # watch-backend = "npm run watch-backend";
+        build-project = "./gradlew build";
+        build-apk = "./gradlew assembleDebug";
       };
     };
   };
