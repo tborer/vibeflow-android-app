@@ -1,4 +1,3 @@
-
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -6,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.yourappname'
+    namespace 'com.example.your_app_name' // Make sure this is correct
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.yourappname"
+        applicationId "com.example.your_app_name" // Make sure this is correct
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -35,23 +34,27 @@ android {
 }
 
 dependencies {
+
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    // ML Kit
-    implementation 'com.google.mlkit:object-detection:17.0.1'
-
-    // Generative AI
-    implementation 'com.google.ai.client.generativeai:generativeai:0.1.0'
-
-    // Kotlinx Serialization
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3'
-
-    // AndroidX libraries
-    implementation 'androidx.activity:activity-ktx:1.8.0'
-
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // ML Kit Text Recognition
+    implementation 'com.google.mlkit:text-recognition:16.0.0'
+
+    // Gemini AI
+    implementation 'com.google.ai.client.generativeai:generativeai:0.1.0'
+
+    // Kotlin Serialization
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+
+    // Coroutines for background tasks
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+
+    // Lifecycle scope for coroutines
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
 }

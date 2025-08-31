@@ -21,8 +21,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.launch
-import com.google.ai.client.generativeai.BuildConfig
-
+import com.example.your_app_name.BuildConfig
 import androidx.lifecycle.lifecycleScope
 import java.io.IOException
 
@@ -34,9 +33,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private lateinit var imageView: ImageView
     private lateinit var resultTextView: TextView
- private lateinit var progressBar: ProgressBar
+    private lateinit var progressBar: ProgressBar
     private var processedCount = 0
- private lateinit var generativeModel: GenerativeModel
+    private lateinit var generativeModel: GenerativeModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
- resultTextView.text = "" // Clear previous text
- imageView.setImageURI(null) // Clear previous image
+                resultTextView.text = "" // Clear previous text
+                imageView.setImageURI(null) // Clear previous image
                 val data: Intent? = result.data
                 // Handle multiple selected images
                 if (data.clipData != null) {
@@ -63,32 +62,32 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
- // Initialize the GenerativeModel client.
- generativeModel = GenerativeModel(modelName = "gemini-pro", apiKey = BuildConfig.GEMINI_API_KEY)
+        // Initialize the GenerativeModel client.
+        generativeModel = GenerativeModel(modelName = "gemini-pro", apiKey = BuildConfig.GEMINI_API_KEY)
 
         selectImageButton = findViewById(R.id.selectImageButton)
         imageView = findViewById(R.id.imageView)
         resultTextView = findViewById(R.id.resultTextView)
- progressBar = findViewById(R.id.progressBar) // Assuming the ProgressBar has the ID 'progressBar'
+        progressBar = findViewById(R.id.progressBar) // Assuming the ProgressBar has the ID 'progressBar'
 
         selectImageButton.setOnClickListener {
             Log.d("MainActivity", "Button clicked")
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                 type = "image/*"
- setAction(Intent.ACTION_OPEN_DOCUMENT)
- putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                setAction(Intent.ACTION_OPEN_DOCUMENT)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
             pickImageLauncher.launch(intent)
         }
     }
 
     // Function to handle displaying recognized text (not needed for direct display)
- private fun displayRecognizedText(text: String) {
- // This function is now empty as we don't display extracted text directly
+    private fun displayRecognizedText(text: String) {
+        // This function is now empty as we don't display extracted text directly
     }
 
     private fun processSelectedImages() {
- progressBar.visibility = ProgressBar.VISIBLE // Show progress bar
+        progressBar.visibility = ProgressBar.VISIBLE // Show progress bar
         extractedTexts.clear()
         processedCount = 0
         selectedImageUris.forEach { uri ->
@@ -103,8 +102,8 @@ class MainActivity : AppCompatActivity() {
             // All images have been processed
             val jsonText = createJsonFromExtractedTexts(extractedTexts)
             Log.d(TAG, "Generated JSON: $jsonText")
- lifecycleScope.launch {
- progressBar.visibility = ProgressBar.GONE // Hide progress bar
+            lifecycleScope.launch {
+                progressBar.visibility = ProgressBar.GONE // Hide progress bar
                 sendTextToGemini(jsonText)
             }
 
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun processImageWithMLKit(uri: Uri) {
         try {
- val image = InputImage.fromFilePath(this, uri) // Corrected
+            val image = InputImage.fromFilePath(this, uri) // Corrected
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
             recognizer.process(image)
                 .addOnSuccessListener { visionText ->
@@ -123,18 +122,20 @@ class MainActivity : AppCompatActivity() {
                     val resultText = visionText.text
                     Log.d(TAG, "Text recognition successful for ${uri.lastPathSegment}: $resultText")
                     extractedTexts.add(resultText)
+                    onImageProcessingComplete()
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception
- handleRecognitionError(e)
+                    handleRecognitionError(e)
+                    onImageProcessingComplete()
                 }
- catch (e: IOException) {
- e.printStackTrace()
- handleRecognitionError(e)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            handleRecognitionError(e)
+            onImageProcessingComplete()
         } catch (e: Exception) {
- e.printStackTrace()
- handleRecognitionError(e)
-        } finally {
+            e.printStackTrace()
+            handleRecognitionError(e)
             onImageProcessingComplete()
         }
     }
@@ -144,23 +145,20 @@ class MainActivity : AppCompatActivity() {
             "screenshot${index + 1}" to text
         }.toMap()
         return Json.encodeToString(jsonMap)
-
-        }
     }
 
     private fun handleRecognitionError(e: Exception) {
         Log.e(TAG, "Text recognition failed", e)
         Toast.makeText(this, "Text recognition failed: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
     }
 
- private suspend fun sendTextToGemini(text: String) {
+    private suspend fun sendTextToGemini(text: String) {
         try {
- val response = generativeModel.generateContent(text)
- resultTextView.text = response.text
+            val response = generativeModel.generateContent(text)
+            resultTextView.text = response.text
         } catch (e: Exception) {
- Log.e(TAG, "Error sending text to Gemini API", e)
- Toast.makeText(this, "Gemini API call failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "Error sending text to Gemini API", e)
+            Toast.makeText(this, "Gemini API call failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }
