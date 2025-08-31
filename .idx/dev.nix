@@ -17,8 +17,6 @@
     # Correctly set ANDROID_HOME and ANDROID_SDK_ROOT using android-studio
     ANDROID_HOME = "${pkgs.android-studio}/android-sdk";
     ANDROID_SDK_ROOT = "${pkgs.android-studio}/android-sdk";
-    # Add Android SDK tools to PATH
-    PATH = "${pkgs.android-studio}/android-sdk/cmdline-tools/latest/bin:${pkgs.android-studio}/android-sdk/platform-tools:$PATH";
   };
 
   idx = {
@@ -46,6 +44,10 @@
         # Setup gradle wrapper
         gradle-wrapper = ''
           cd app && (./gradlew wrapper || gradle wrapper) || true
+        '';
+        # Add Android tools to PATH in the workspace initialization
+        setup-path = ''
+          export PATH="${pkgs.android-studio}/android-sdk/cmdline-tools/latest/bin:${pkgs.android-studio}/android-sdk/platform-tools:$PATH"
         '';
       };
       
