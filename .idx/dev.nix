@@ -25,7 +25,7 @@
       # Runs when a workspace is first created
       onCreate = {
         # Download and set up the Android SDK
-        sdk-setup = '''
+        sdk-setup = ''
           echo "Setting up Android SDK..."
           mkdir -p $HOME/android-sdk/cmdline-tools
           
@@ -49,13 +49,13 @@
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;34.0.0" "platforms;android-34" "platform-tools"
           
           echo "Android SDK setup complete!"
-        ''';
+        '';
       };
       
       # Runs every time the workspace is (re)started
       onStart = {
         # Verify SDK setup
-        sdk-verify = '''
+        sdk-verify = ''
           echo "Verifying Android SDK..."
           if [ -d "$ANDROID_HOME/cmdline-tools/latest/bin" ]; then
             echo "Android SDK found at $ANDROID_HOME"
@@ -63,7 +63,7 @@
           else
             echo "Android SDK not found. Please check the setup."
           fi
-        ''';
+        '';
       };
     };
   };

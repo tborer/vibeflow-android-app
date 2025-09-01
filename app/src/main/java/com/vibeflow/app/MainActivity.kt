@@ -43,21 +43,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                resultTextView.text = "" // Clear previous text
-                imageView.setImageURI(null) // Clear previous image
-                val data: Intent? = result.data
-                // Handle multiple selected images
-                if (data.clipData != null) {
-                    selectedImageUris = (0 until data.clipData!!.itemCount).map {
-                        data.clipData!!.getItemAt(it).uri
-                    }.take(5) // Limit to 5 images
-                    processSelectedImages()
-                } else if (data.data != null) {
-                    // Handle single image selection for now, can be refined
-                    val uri = data.data!!
-                    processImageWithMLKit(uri)
-                    imageView.setImageURI(uri)
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let { data ->
+                    resultTextView.text = "" // Clear previous text
+                    imageView.setImageURI(null) // Clear previous image
+                    // Handle multiple selected images
+                    data.clipData?.let { clipData ->
+                        selectedImageUris = (0 until clipData.itemCount).map {
+                            clipData.getItemAt(it).uri
+                        }.take(5) // Limit to 5 images
+                        processSelectedImages()
+                    } ?: data.data?.let { uri ->
+                        // Handle single image selection
+                        selectedImageUris = listOf(uri)
+                        processImageWithMLKit(uri)
+                        imageView.setImageURI(uri)
+                    }
                 }
             }
         }
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity", "Button clicked")
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                 type = "image/*"
-                setAction(Intent.ACTION_OPEN_DOCUMENT)
+                action = Intent.ACTION_OPEN_DOCUMENT
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
             pickImageLauncher.launch(intent)
