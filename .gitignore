@@ -1,0 +1,23 @@
+# Android build files
+/build
+/app/build
+/app/release/
+/app/debug/
+
+# IDE files
+.idea/
+*.iml
+*.hprof
+
+# Gradle files
+.gradle/
+build/
+local.properties
+/captures/
+
+# Keystore files
+*.jks
+*.keystore
+
+# Zip files
+*.zip
