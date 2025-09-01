@@ -8,6 +8,8 @@
 
   # Add environment variables here
   env = {
+    # Set JAVA_HOME to the Nix package for Java 17
+    JAVA_HOME = "${pkgs.jdk17}";
     GEMINI_API_KEY = "AIzaSyCuTGRqe5qurdhZiFivq2ovv0tGLuaQeaU";
     ANDROID_HOME = "/home/user/android-sdk";
     ANDROID_SDK_ROOT = "/home/user/android-sdk";
