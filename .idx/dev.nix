@@ -8,6 +8,8 @@
   env = {
     JAVA_HOME = "${pkgs.jdk17}";
     GEMINI_API_KEY = "AIzaSyCuTGRqe5qurdhZiFivq2ovv0tGLuaQeaU";
+    ANDROID_HOME = "\${PWD}/android-sdk";
+    ANDROID_SDK_ROOT = "\${PWD}/android-sdk";
   };
 
   idx = {
@@ -41,18 +43,16 @@
           # Accept licenses
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
           
-          # Install platform tools
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" || true
+          # Install platform tools and build tools
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "build-tools;34.0.0" || true
         '';
       };
       
       onStart = {
-        setup-android-env = ''
-          export ANDROID_HOME="$(pwd)/android-sdk"
-          export ANDROID_SDK_ROOT="$ANDROID_HOME"
-          export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
-        '';
         gradle-permissions = "chmod +x ./gradlew";
+        setup-android-path = ''
+          export PATH="$PATH:$PWD/android-sdk/cmdline-tools/latest/bin:$PWD/android-sdk/platform-tools:$PWD/android-sdk/build-tools/34.0.0"
+        '';
       };
     };
   };
