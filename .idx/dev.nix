@@ -3,6 +3,7 @@
     pkgs.unzip
     pkgs.wget
     pkgs.jdk17
+    pkgs.imagemagick
   ];
 
   env = {
