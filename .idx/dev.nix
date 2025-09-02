@@ -5,6 +5,7 @@
   packages = [
     # Add android-tools to provide adb and other utilities.
     pkgs.android-tools
+    pkgs.android-udev-rules
     pkgs.unzip
     pkgs.wget
     pkgs.jdk17
